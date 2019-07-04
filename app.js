@@ -87,12 +87,6 @@ app.get("/blogs/:id/edit", function ( req, res ) {
     })
 });
 
-app.get("/blogs/:id/edit/back", function ( req, res ) {
-    Blog.findById(req.params.id, function ( ) {
-            res.redirect( "/blogs");
-    })
-});
-
 //UPDATE ROUTE
 app.put("/blogs/:id", function ( req, res ) {
     req.body.blog.body = req.sanitize(req.body.blog.body);

@@ -1,6 +1,6 @@
 <% include ./partials/header%>
 
-<div class="ui main text container segment">
+<div id="blog-content-container" class="ui main text container segment">
     <div class="ui huge header"><%= blog.title %></div>
         <div class="ui top attached">
             <div class="item">
@@ -12,12 +12,18 @@
                     <p><%= blog.body%></p>
                 </div>
              </div>
-            <a class="ui yellow reversed button" href="/blogs/<%=blog._id%>/edit">Edit</a>
+            <a class="ui yellow reversed button" href="/blogs/<%=blog._id%>/edit">
+                <i id="icon" class="edit outline icon"></i>
+            </a>
             <form id="delete" method="POST" action="/blogs/<%=blog._id%>?_method=DELETE">
-                <button class="ui red reversed button">Delete</button>
+                <button class="ui red reversed button">
+                    <i id="icon" class="trash alternate outline icon"></i>
+                </button>
             </form>
-            <a class="ui teal reversed button" href="/blogs/<%=blog._id%>/edit/back">Back</a>
-        </div>
+            <a id="back-button" class="ui teal reversed button" href="/blogs/">
+                <i id="icon" class="arrow circle left icon"></i>
+            </a>
+    </div>
 </div>
 
 <% include ./partials/footer%>

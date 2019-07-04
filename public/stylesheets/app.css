@@ -1,11 +1,38 @@
+body {
+    margin-top: 5rem;
+}
+
 i .icon {
     font-size: 2em;
+    text-align: center;
+    margin: 0em 0em;
+}
+
+.container {
+    text-align: center;
 }
 
 .container.main {
+    margin-top: 6.0em;
+}
+
+#new-post-container {
+    margin-top: 7.0em;
+}
+
+#blog-content-container {
     margin-top: 7.0em;
 }
 
 #delete {
     display: inline;
+}
+
+#index-header {
+    text-align: center;
+    color: darkslategrey;
+}
+
+#icon {
+    margin: auto;
 }
