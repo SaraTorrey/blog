@@ -1,6 +1,4 @@
 mongoose    = require( "mongoose" );
-
-//APP CONFIG
 mongoose.connect( "mongodb://localhost:27017/blog_app", {useNewUrlParser: true} );
 
 let postSchema = new mongoose.Schema( {
