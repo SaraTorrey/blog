@@ -5,37 +5,47 @@ let Post = require( "./models/post" );
 let User = require( "./models/user" );
 
 
+User.remove({}, function() {
+    Post.remove({}, function() {
+        User.create({
+            email: "bob@gmail.com",
+            name: "Bob Belcher"
+        }, function(err, user) {
+            if(err) {
+                console.log(err);
+            } else {
+                User.findOne({email: "bob@gmail.com"}).populate("posts").exec(function(err, foundUser){
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        console.log(foundUser);
+                        Post.create({
+                            title: "How to cook the best burger pt. 2",
+                            content: "blah blah blah blah blah"
+                        }, function(err, post){
+                            if(err) {
+                                console.log(err);
+                            } else {
+                                User.findOne({email: "bob@gmail.com"}, function(err, foundUser){
+                                    if(err){
+                                        console.log(err);
+                                    } else {
+                                        foundUser.posts.push(post._id);
+                                        foundUser.save(function(err, data){
+                                            if(err){
+                                                console.log(err);
+                                            } else {
+                                                console.log(data);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
 
-// User.create( {
-//                  email: "hello@hi.com",
-//                  name: "Hello There",
-//              } );
-//
-// Post.create( {
-//                  title: "How to do this thingy, part 4",
-//                  content: "that is how!"
-//              }, function ( err, post ) {
-//                 User.findOne({email: "me@gmail.com"}, function(err, foundUser) {
-//                         if ( err ) {
-//                             console.log( err );
-//                         } else {
-//                             foundUser.post.push( post );
-//                             foundUser.save( function ( err, data ) {
-//                                 if ( err ) {
-//                                     console.log( err );
-//                                 }
-//                                 else {
-//                                     console.log( data );
-//                                 }
-//                             } );
-//                     }
-//                 });
-//             } );
-
-// User.findOne({email:"hello@hi.com"}).populate("posts").exec(function ( err, user ) {
-//     if(err) {
-//         console.log(err);
-//     } else {
-//         console.log(user);
-//     }
-// });
+    });
+});
