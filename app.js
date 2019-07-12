@@ -1,9 +1,14 @@
 let express = require( "express" );
-expressSanitizer = require( "express-sanitizer" );
-methodOverride = require( "method-override" );
+    expressSanitizer = require( "express-sanitizer" );
+    methodOverride = require( "method-override" );
+    bodyParser  = require( "body-parser" );
+    mongoose    = require( "mongoose" );
+    passport = require("passport");
+    LocalStrategy = require("passport-local");
+    passportLocalMongoose = require("passport-local-mongoose");
+    User = require("./models/user");
+
 app         = express();
-bodyParser  = require( "body-parser" );
-mongoose    = require( "mongoose" );
 
 //APP CONFIG
 mongoose.connect( "mongodb://localhost:27017/restful_blog_app", {useNewUrlParser: true} );
@@ -13,6 +18,16 @@ app.use( express.static( "public" ) );
 app.use( bodyParser.urlencoded( {extended: true} ) );
 app.use( expressSanitizer() );
 app.use( methodOverride( "_method" ) );
+app.use(require("express-session")({
+    secret: "Houston is hot!",
+    resave: false,
+    saveUninitialized:false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 //MONGOOSE/MODEL CONFIG
 let blogSchema = new mongoose.Schema({
@@ -34,6 +49,10 @@ let Blog = mongoose.model( "Blog", blogSchema );
 
 app.get("/", function ( req, res ) {
     res.redirect("/blogs");
+});
+
+app.get("/blogs/secret", function ( req, res ) {
+    res.render("secret");
 });
 
 
@@ -111,6 +130,6 @@ app.delete( "/blogs/:id", function ( req, res ) {
     })
 } );
 
-// app.listen( 3000, process.env.IP, function () {
-//     console.log( "blog has started!" );
-// } );
+app.listen( 3000, process.env.IP, function () {
+    console.log( "blog has started!" );
+} );
