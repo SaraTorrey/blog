@@ -26,6 +26,8 @@ app.use(require("express-session")({
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -53,6 +55,38 @@ app.get("/", function ( req, res ) {
 
 app.get("/blogs/secret", function ( req, res ) {
     res.render("secret");
+});
+
+app.get("/blogs/register", function(req, res){
+    res.render("register");
+});
+
+app.post("/blogs/register", function(req, res){
+    // req.body.username
+    // req.body.password
+    User.register(new User({username: req.body.username}), req.body.password, function (err, user) {
+        if (err){
+            console.log(err);
+            return res.render("register");
+        }
+        passport.authenticate("local")(req, res, function () {
+            res.redirect("/blogs/secret");
+        });
+    });
+});
+
+//LOGIN Routes
+//render Login form
+app.get("/blogs/login", function(req, res){
+    res.render("login");
+});
+
+//login logic
+//middleware
+app.post("/blogs/login", passport.authenticate("local",{
+    successRedirect: "/blogs/secret",
+    failRedirect: "/blogs/login",
+}), function(req, res){
 });
 
 
