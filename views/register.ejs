@@ -1,7 +1,28 @@
-<h>Login</h>
+<% include ./partials/header%>
 
-<form action="/blogs/register" method="post">
-    <input type="text" name="username" placeholder="username">
-    <input type="password" name="password" placeholder="password">
-    <button>Submit</button>
-</form>
+<div id="new-post-container" class="ui main text container segment">
+    <div class="ui huge header">New User</div>
+    <form class="ui form" action="/blogs/register" method="post">
+
+<!--        <div class="field">-->
+<!--            <label>First Name</label>-->
+<!--            <input name="" type="text" placeholder="First Name" >-->
+<!--        </div>-->
+
+<!--        <div class="field">-->
+<!--            <label>Last Name</label>-->
+<!--            <input type="text" placeholder="Last Name" >-->
+<!--        </div>-->
+        <div class="field">
+            <label>Username</label>
+            <input type="text" name="username" placeholder="Username" >
+        </div>
+        <div class="field">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Password" >
+        </div>
+        <input class="ui basic grey button" type="submit">
+    </form>
+</div>
+
+<% include ./partials/footer%>

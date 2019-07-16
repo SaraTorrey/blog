@@ -49,11 +49,7 @@ let Blog = mongoose.model( "Blog", blogSchema );
 
 //RESTFUL ROUTES
 
-app.get("/", function ( req, res ) {
-    res.redirect("/blogs");
-});
-
-app.get("/blogs/secret", function ( req, res ) {
+app.get("/blogs/secret", isLoggedIn, function ( req, res ) {
     res.render("secret");
 });
 
@@ -62,8 +58,8 @@ app.get("/blogs/register", function(req, res){
 });
 
 app.post("/blogs/register", function(req, res){
-    // req.body.username
-    // req.body.password
+    req.body.username
+    req.body.password
     User.register(new User({username: req.body.username}), req.body.password, function (err, user) {
         if (err){
             console.log(err);
@@ -75,8 +71,8 @@ app.post("/blogs/register", function(req, res){
     });
 });
 
-//LOGIN Routes
-//render Login form
+// LOGIN Routes
+// render Login form
 app.get("/blogs/login", function(req, res){
     res.render("login");
 });
@@ -85,10 +81,27 @@ app.get("/blogs/login", function(req, res){
 //middleware
 app.post("/blogs/login", passport.authenticate("local",{
     successRedirect: "/blogs/secret",
-    failRedirect: "/blogs/login",
+    failureRedirect: "/blogs/login",
 }), function(req, res){
 });
 
+app.get("/blogs/logout", function(req, res){
+    req.logout();
+    res.redirect("/blogs");
+});
+
+function isLoggedIn(req, res, next) {
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/blogs/login");
+}
+
+
+
+app.get("/", function ( req, res ) {
+    res.redirect("/blogs");
+});
 
 app.get("/blogs", function ( req, res ) {
     Blog.find({}, function ( err, blogs ) {
@@ -101,19 +114,19 @@ app.get("/blogs", function ( req, res ) {
 });
 
 //NEW ROUTE
-app.get("/blogs/new", function ( req, res ) {
+app.get("/blogs/secret/new", function ( req, res ) {
      res.render("new");
 });
 
-//CREATE ROUTE
-app.post("/blogs", function ( req, res ) {
+//CREATE A NEW POST ROUTE
+app.post("/blogs/secret/new", function ( req, res ) {
     //create blog
     req.body.blog.body = req.sanitize(req.body.blog.body);
     Blog.create(req.body.blog, function (err, newBlog) {
         if(err){
             res.render("new");
         }else {
-            res.redirect("/blogs");
+            res.redirect("/blogs/secret");
         }
     });
 });
